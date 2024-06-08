@@ -1,0 +1,263 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #151515;
+    color: #EEEEEE;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #151515;
+    color: #EEEEEE;
+}
+
+header .logo img {
+    max-height: 150px; 
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+header nav ul li a {
+    color: #EEEEEE;
+    text-decoration: none;
+}
+
+header .search-cart {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header .search-cart input {
+    padding: 5px;
+    background-color: #333;
+    border: 1px solid #EEEEEE;
+    color: #EEEEEE;
+}
+
+header .search-cart .cart-icon {
+    color: #EEEEEE;
+    text-decoration: none;
+}
+
+.hero {
+    background-image: url(bg1.jpg);
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    padding: 100px 20px;
+    color: #EEEEEE;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    background-color: rgba(21, 21, 21, 0.8); 
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.hero button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #A91D3A;
+    border: none;
+    cursor: pointer;
+    color: #EEEEEE;
+}
+
+.featured-products {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #151515;
+    color: #EEEEEE;
+}
+
+.featured-products h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    padding: 20px;
+    border: 1px solid #EEEEEE;
+    text-align: center;
+    background-color: #333;
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product-card h3 {
+    font-size: 24px;
+    margin: 10px 0;
+}
+
+.product-card p {
+    font-size: 20px;
+    color: #C73659;
+}
+
+.product-card button {
+    padding: 10px 20px;
+    background-color: #A91D3A;
+    color: #EEEEEE;
+    border: none;
+    cursor: pointer;
+}
+
+.about-us {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #1A1A1A;
+    color: #EEEEEE;
+}
+
+.about-us h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.about-us p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.contact-us {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #151515;
+    color: #EEEEEE;
+}
+
+.contact-us h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.contact-us form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-us form label {
+    font-size: 18px;
+}
+
+.contact-us form input, .contact-us form textarea {
+    padding: 10px;
+    width: 300px;
+    background-color: #333;
+    border: 1px solid #EEEEEE;
+    color: #EEEEEE;
+}
+
+.contact-us form button {
+    padding: 10px 20px;
+    background-color: #A91D3A;
+    border: none;
+    cursor: pointer;
+    color: #EEEEEE;
+}
+
+.why-choose-us {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #1A1A1A;
+    color: #EEEEEE;
+}
+
+.why-choose-us h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.feature {
+    text-align: center;
+}
+
+.feature img {
+    max-width: 50px;
+    height: auto;
+}
+
+.testimonials {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #151515;
+    color: #EEEEEE;
+}
+
+.testimonials h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+.testimonial {
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+footer {
+    background-color: #151515;
+    color: #EEEEEE;
+    padding: 20px;
+    text-align: center;
+}
+
+footer .social-media a {
+    color: #EEEEEE;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+footer .newsletter {
+    margin: 20px 0;
+}
+
+footer .newsletter input {
+    padding: 10px;
+    width: 200px;
+    background-color: #333;
+    border: 1px solid #EEEEEE;
+    color: #EEEEEE;
+}
+
+footer .newsletter button {
+    padding: 10px 20px;
+    background-color: #A91D3A;
+    border: none;
+    cursor: pointer;
+    color: #EEEEEE;
+}
+
+footer .contact-info p {
+    margin: 5px 0;
+}
