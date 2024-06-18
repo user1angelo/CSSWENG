@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Dashcam Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Dashcam Store Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <input type="text" placeholder="Search...">
+            <a href="#" class="cart-icon">Cart</a>
+        </div>
+    </header>
+
+    <section id="products" class="product-listing">
+        <h2>Products</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="product1.jpg" alt="Dashcam Model 1">
+                <h3>Dashcam Model 1</h3>
+                <p>$199.99</p>
+                <button onclick="openQuickView('Dashcam Model 1', '1080p recording, Night vision, GPS tracking', 'product1.jpg', 'Dashcam Model 1 provides high-quality 1080p recording with night vision and GPS tracking for enhanced safety and convenience.')">Quick View</button>
+            </div>
+            <div class="product-card">
+                <img src="product2.jpg" alt="Dashcam Model 2">
+                <h3>Dashcam Model 2</h3>
+                <p>$249.99</p>
+                <button onclick="openQuickView('Dashcam Model 2', '4K recording, WiFi connectivity, Dual camera', 'product2.jpg', 'Dashcam Model 2 offers 4K recording, WiFi connectivity, and dual camera setup for comprehensive coverage and ease of use.')">Quick View</button>
+            </div>
+            <!-- Add more product cards as needed -->
+        </div>
+    </section>
+
+    <div id="quickViewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeQuickView()">&times;</span>
+            <div class="modal-body">
+                <div class="modal-left">
+                    <img id="modalImage" src="" alt="Product Image">
+                </div>
+                <div class="modal-right">
+                    <h2 id="modalTitle"></h2>
+                    <p id="modalDescription"></p>
+                    <ul id="modalSpecs"></ul>
+                    <a href="#" id="viewProductDetails">View Product Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-media">
+            <a href="https://www.facebook.com/profile.php?id=100065085966166">Facebook</a>
+            <a href="https://twitter.com">Twitter</a>
+            <a href="https://www.instagram.com">Instagram</a>
+        </div>
+        <form class="newsletter">
+            <input type="email" placeholder="Subscribe to our newsletter">
+            <button>Subscribe</button>
+        </form>
+        <div class="contact-info">
+            <p>Email: contact@dashcamstore.com</p>
+            <p>Phone: (123) 456-7890</p>
+        </div>
+    </footer>
+
+    <script>
+        function openQuickView(title, specs, imageSrc, description) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDescription').innerText = description;
+            document.getElementById('modalImage').src = imageSrc;
+
+            const specsList = specs.split(', ');
+            const modalSpecs = document.getElementById('modalSpecs');
+            modalSpecs.innerHTML = '';
+            specsList.forEach(spec => {
+                const li = document.createElement('li');
+                li.textContent = spec;
+                modalSpecs.appendChild(li);
+            });
+
+            const viewProductDetailsLink = document.getElementById('viewProductDetails');
+            const params = new URLSearchParams({ title, specs, imageSrc, description });
+            viewProductDetailsLink.href = `product-details.html?${params.toString()}`;
+
+            document.getElementById('quickViewModal').style.display = 'block';
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickViewModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
