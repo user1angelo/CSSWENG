@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Dashcam Store</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Dashcam Store Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <input type="text" placeholder="Search...">
+            <a href="#" class="cart-icon">Cart</a>
+        </div>
+    </header>
+
+    <section id="product-details" class="product-details">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-left">
+                    <img id="productImage" src="" alt="Product Image">
+                </div>
+                <div class="modal-right">
+                    <h2 id="productTitle"></h2>
+                    <p id="productDescription"></p>
+                    <ul id="productSpecs"></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="social-media">
+            <a href="https://www.facebook.com/profile.php?id=100065085966166">Facebook</a>
+            <a href="https://twitter.com">Twitter</a>
+            <a href="https://www.instagram.com">Instagram</a>
+        </div>
+        <form class="newsletter">
+            <input type="email" placeholder="Subscribe to our newsletter">
+            <button>Subscribe</button>
+        </form>
+        <div class="contact-info">
+            <p>Email: contact@dashcamstore.com</p>
+            <p>Phone: (123) 456-7890</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const title = urlParams.get('title');
+            const description = urlParams.get('description');
+            const specs = urlParams.get('specs');
+            const imageSrc = urlParams.get('imageSrc');
+
+            document.getElementById('productTitle').innerText = title;
+            document.getElementById('productDescription').innerText = description;
+            document.getElementById('productImage').src = imageSrc;
+
+            const specsList = specs.split(', ');
+            const productSpecs = document.getElementById('productSpecs');
+            productSpecs.innerHTML = '';
+            specsList.forEach(spec => {
+                const li = document.createElement('li');
+                li.textContent = spec;
+                productSpecs.appendChild(li);
+            });
+        });
+    </script>
+</body>
+</html>

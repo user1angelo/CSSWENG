@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forums - Dashcam Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Additional CSS specific to forums page */
+        .forum-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #151515;
+            color: #EEEEEE;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .forum-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .forum-topic {
+            background-color: #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .forum-topic h3 {
+            font-size: 24px;
+            margin: 0;
+            color: #EEEEEE;
+        }
+
+        .forum-topic p {
+            margin: 5px 0;
+            color: #C73659;
+        }
+
+        .forum-topic a {
+            color: #A91D3A;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #A91D3A;
+            border-radius: 5px;
+        }
+
+        .forum-topic a:hover {
+            background-color: #A91D3A;
+            color: #EEEEEE;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Dashcam Store Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="forums.html">Forums</a></li> <!-- Current page, active state -->
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <input type="text" placeholder="Search...">
+            <a href="#" class="cart-icon">Cart</a>
+        </div>
+        <div class="auth-buttons">
+            <a href="signup.html" class="auth-button">Sign Up</a>
+            <a href="signin.html" class="auth-button">Sign In</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="forum-container">
+            <h2 class="forum-title">Welcome to the Dashcam Store Forums</h2>
+            <div class="forum-topic">
+                <h3>Topic 1</h3>
+                <p>Started by: User123 on July 11, 2024</p>
+                <a href="#">View Discussion</a>
+            </div>
+            <div class="forum-topic">
+                <h3>Topic 2</h3>
+                <p>Started by: User456 on July 12, 2024</p>
+                <a href="#">View Discussion</a>
+            </div>
+            <!-- Add more forum topics as needed -->
+        </div>
+    </main>
+
+    <footer>
+        <div class="social-media">
+            <a href="https://www.facebook.com/profile.php?id=100065085966166">Facebook</a>
+            <a href="https://twitter.com">Twitter</a>
+            <a href="https://www.instagram.com">Instagram</a>
+        </div>
+        <form class="newsletter">
+            <input type="email" placeholder="Subscribe to our newsletter">
+            <button>Subscribe</button>
+        </form>
+        <div class="contact-info">
+            <p>Email: contact@dashcamstore.com</p>
+            <p>Phone: (123) 456-7890</p>
+        </div>
+    </footer>
+
+</body>
+</html>

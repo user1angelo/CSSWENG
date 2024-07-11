@@ -15,10 +15,11 @@ header {
     padding: 20px;
     background-color: #151515;
     color: #EEEEEE;
+    border-bottom: 1px solid #333;
 }
 
 header .logo img {
-    max-height: 150px; 
+    max-height: 50px;
 }
 
 header nav ul {
@@ -30,6 +31,12 @@ header nav ul {
 header nav ul li a {
     color: #EEEEEE;
     text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+header nav ul li a:hover {
+    background-color: #333;
 }
 
 header .search-cart {
@@ -43,15 +50,19 @@ header .search-cart input {
     background-color: #333;
     border: 1px solid #EEEEEE;
     color: #EEEEEE;
+    border-radius: 5px;
 }
 
 header .search-cart .cart-icon {
     color: #EEEEEE;
     text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #A91D3A;
 }
 
 .hero {
-    background-image: url(bg1.jpg);
+    background-image: url('bg1.jpg');
     background-size: cover;
     background-position: center;
     text-align: center;
@@ -62,7 +73,7 @@ header .search-cart .cart-icon {
 .hero h1 {
     font-size: 48px;
     margin-bottom: 20px;
-    background-color: rgba(21, 21, 21, 0.8); 
+    background-color: rgba(21, 21, 21, 0.8);
     display: inline-block;
     padding: 10px 20px;
     border-radius: 10px;
@@ -75,6 +86,7 @@ header .search-cart .cart-icon {
     border: none;
     cursor: pointer;
     color: #EEEEEE;
+    border-radius: 5px;
 }
 
 .featured-products {
@@ -100,11 +112,13 @@ header .search-cart .cart-icon {
     border: 1px solid #EEEEEE;
     text-align: center;
     background-color: #333;
+    border-radius: 10px;
 }
 
 .product-card img {
     max-width: 100%;
     height: auto;
+    border-radius: 10px;
 }
 
 .product-card h3 {
@@ -123,6 +137,7 @@ header .search-cart .cart-icon {
     color: #EEEEEE;
     border: none;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 .about-us {
@@ -171,6 +186,7 @@ header .search-cart .cart-icon {
     background-color: #333;
     border: 1px solid #EEEEEE;
     color: #EEEEEE;
+    border-radius: 5px;
 }
 
 .contact-us form button {
@@ -179,6 +195,7 @@ header .search-cart .cart-icon {
     border: none;
     cursor: pointer;
     color: #EEEEEE;
+    border-radius: 5px;
 }
 
 .why-choose-us {
@@ -248,6 +265,7 @@ footer .newsletter input {
     background-color: #333;
     border: 1px solid #EEEEEE;
     color: #EEEEEE;
+    border-radius: 5px;
 }
 
 footer .newsletter button {
@@ -256,8 +274,122 @@ footer .newsletter button {
     border: none;
     cursor: pointer;
     color: #EEEEEE;
+    border-radius: 5px;
 }
 
 footer .contact-info p {
     margin: 5px 0;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #151515;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #333;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 10px;
+    color: #EEEEEE;
+}
+
+.close {
+    color: #EEEEEE;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #C73659;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: row;
+}
+
+.modal-left, .modal-right {
+    flex: 1;
+}
+
+.modal-left {
+    padding-right: 20px;
+}
+
+.modal-left img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.modal-right {
+    padding-left: 20px;
+}
+
+.modal-right h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.modal-right p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.modal-right ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.modal-right ul li {
+    background-color: #333;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.modal-right a {
+    color: #A91D3A;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid #A91D3A;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* Styles for Sign Up and Sign In buttons */
+.auth-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.auth-button {
+    padding: 10px 20px;
+    background-color: #A91D3A;
+    color: #EEEEEE;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.auth-button:hover {
+    background-color: #C73659;
 }
