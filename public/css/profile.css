@@ -1,0 +1,36 @@
+/* Seperating css files na :) 
+
+    styles.css has 350+ lines e HAHAHAHHA
+
+*/
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.profile-info {
+    display: flex;
+    align-items: flex-start;
+
+
+}
+
+.profile-picture img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.user-details h2 {
+    margin-top: 0;
+}
+
+
+
+
+
+.bio {
+    font-style: italic;
+}

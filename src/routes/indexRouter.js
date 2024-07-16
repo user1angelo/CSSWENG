@@ -33,6 +33,13 @@ indexRouter.get('/products', (req,res) => {
     });
 })
 
+// BEEP BEEP BOOP BOOP underr construction pa to.
+indexRouter.get('/forum', (req, res) => {
+    res.render("forum", {
+        title: "Forum Page"
+    });
+});
+
 indexRouter.get('/signup', (req,res)=>{
     res.render("signup", {
         title: "Signup Page"

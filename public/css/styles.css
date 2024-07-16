@@ -22,6 +22,17 @@ header .logo img {
     max-height: 50px;
 }
 
+header .profile-class img {
+    max-height: 50px;
+    margin-right: 10px;
+    /* border: solid 1px green; */
+}
+
+header .right-side-header {
+    display: flex;
+    flex-direction: row;
+}
+
 header nav ul {
     list-style: none;
     display: flex;

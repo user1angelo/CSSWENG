@@ -15,8 +15,20 @@ const usersSchema = new Schema({
     password: {
         type: SchemaTypes.String,
         required: true
+    },
+    profilePicture: {
+        type: SchemaTypes.String,
+        default: '/img/default-profile.jpg' // guys, go check profile picture hehe
+    },
+    bio: {
+        type: SchemaTypes.String,
+        default: 'No bio provided, would ya like to add one?'
+    },
+    createdAt: {
+        type: SchemaTypes.Date,
+        default: Date.now
     }
-});
+}, { timestamps: true }); // This adds createdAt and updatedAt fields
 
 const Users = model('User', usersSchema);
 

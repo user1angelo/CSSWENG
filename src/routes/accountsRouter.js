@@ -1,9 +1,18 @@
 import { Router } from 'express';
-
-import mongoose from 'mongoose';
 import Users from '../models/Users.js';
 
 const accountsRouter = Router();
+/*
+
+    accountsRouter.js should handle any request pertaining to the users' accounts...
+
+    1. Creat Account
+    2. Login Verification
+    3. Logout
+    4. Profile
+
+
+*/
 
 accountsRouter.post("/create-account", async (req, res) => {
     console.log("POST request to create user received...");
@@ -61,6 +70,46 @@ accountsRouter.post("/login-verify", async (req, res) =>{
         
     }
 
+});
+
+accountsRouter.get("/logout", (req, res) => {
+    if (req.session.user) {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Error destroying session:", err);
+                return res.status(500).json({ message: "Error logging out" });
+            }
+            res.status(200).json({ message: "Logged out successfully" });
+        });
+    } else {
+        res.status(400).json({ message: "Not logged in, pls go back >w<" });
+    }
+});
+
+// Placeholder route for profile page
+accountsRouter.get("/profile", async (req, res) => {
+    if (req.session.user) {
+        try {
+            const user = await Users.findOne({ email: req.session.user.email });
+            if (user) {
+                res.render('profile', { 
+                    user: {
+                        email: user.email,
+                        createdAt: user.createdAt ? user.createdAt.toLocaleDateString() : 'Unknown',
+                        bio: user.bio,
+                        profilePicture: user.profilePicture
+                    }
+                });
+            } else {
+                res.status(404).send("User not found");
+            }
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Server error");
+        }
+    } else {
+        res.redirect('/login');
+    }
 });
 
 export default accountsRouter;
