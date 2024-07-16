@@ -1,0 +1,15 @@
+{{!-- Experimenting pls wait --}}
+<link rel="stylesheet" href="/css/profile.css">
+<div class="profile-container">
+    <h1>User Profile Page Thing</h1>
+    <div class="profile-info">
+        <div class="profile-picture">
+            <img src="{{user.profilePicture}}" alt="Profile Picture">
+        </div>
+        <div class="user-details">
+            <h2>{{user.email}}</h2>
+            <p>Account created at this date: {{user.createdAt}}</p>
+            <p class="bio">{{user.bio}}</p>
+        </div>
+    </div>
+</div>

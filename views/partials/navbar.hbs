@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/css/styles.css">
+<script src="/js/logout.js" defer></script>
+<header>
+    <div class="logo">
+        <img src="/img/logo.png" alt="Dashcam Store Logo">
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/products">Products</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/forum">Forum</a></li>
+            {{#unless session.user}}
+                <li><a href="/signup">Signup</a></li>
+                <li><a href="/login">Login</a></li>
+            {{else}}
+                <li><a href="#" id="logoutButton">Logout</a></li>
+            {{/unless}}
+        </ul>
+    </nav>
+    <div class="right-side-header">
+        {{#if session.user}}
+            <div class="profile-class">
+                <a href="#" id="profileLink">
+                    <img src="/img/icons/profile-icon.png" alt="profileIcon">
+                </a>
+            </div>
+        {{/if}}
+        <div class="search-cart">
+            <input type="text" placeholder="Search...">
+            <a href="#" class="cart-icon">Cart</a>
+        </div>
+    </div>
+</header>
