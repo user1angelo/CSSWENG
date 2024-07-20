@@ -15,6 +15,9 @@
                 <li><a href="/signup">Signup</a></li>
                 <li><a href="/login">Login</a></li>
             {{else}}
+                {{#if session.user.isAdmin}}
+                    <li><a href="/admin/products">Admin</a></li>
+                {{/if}}
                 <li><a href="#" id="logoutButton">Logout</a></li>
             {{/unless}}
         </ul>

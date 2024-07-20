@@ -1,0 +1,88 @@
+<link rel="stylesheet" href="/css/forum.css">
+<link rel="stylesheet" href="/css/profile.css">
+<div class="forum-container">
+    <div class="single-post">
+        <h1>{{post.title}}</h1>
+        <div class="profile-picture">
+            <img src="{{post.author.profilePicture}}" alt="Profile Picture">
+        </div>
+        <p class="post-meta">By {{post.author.email}} on {{post.product.productName}}</p>
+        <p class="post-content">{{post.content}}</p>
+        <div class="vote-buttons">
+            <button class="upvote" data-id="{{post._id}}">Upvote ({{post.upvotes.length}})</button>
+            <button class="downvote" data-id="{{post._id}}">Downvote ({{post.downvotes.length}})</button>
+        </div>
+    </div>
+
+    <h2>Comments</h2>
+    {{#each post.comments}}
+        <div class="comment">
+            <div class="profile-picture">
+                <img src="{{this.author.profilePicture}}" alt="Profile Picture">
+            </div>
+            <p><strong>{{this.author.email}}:</strong> {{this.content}}</p>
+            <form class="reply-form" action="/forum/post/{{../post._id}}/comment/{{this._id}}/reply" method="POST">
+                <textarea name="content" placeholder="Write a reply" required></textarea>
+                <button type="submit">Reply</button>
+            </form>
+            {{#each this.replies}}
+                <div class="reply">
+                    <div class="profile-picture">
+                        <img src="{{this.author.profilePicture}}" alt="Profile Picture">
+                    </div>
+                    <p><strong>{{this.author.email}}:</strong> {{this.content}}</p>
+                </div>
+            {{/each}}
+        </div>
+    {{/each}}
+
+    {{#if session.user}}
+        <form class="comment-form" action="/forum/post/{{post._id}}/comment" method="POST">
+            <textarea name="content" placeholder="Write a comment" required></textarea>
+            <button type="submit">Add Comment</button>
+        </form>
+    {{else}}
+        <p>Please <a href="/login">log in</a> to comment.</p>
+    {{/if}}
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.upvote').forEach(button => {
+            button.addEventListener('click', async () => {
+                const postId = button.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/forum/post/${postId}/upvote`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const result = await response.json();
+                    button.innerText = `Upvote (${result.upvotes})`;
+                    button.nextElementSibling.innerText = `Downvote (${result.downvotes})`;
+                } catch (error) {
+                    console.error('Error upvoting post:', error);
+                }
+            });
+        });
+
+        document.querySelectorAll('.downvote').forEach(button => {
+            button.addEventListener('click', async () => {
+                const postId = button.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/forum/post/${postId}/downvote`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const result = await response.json();
+                    button.innerText = `Downvote (${result.downvotes})`;
+                    button.previousElementSibling.innerText = `Upvote (${result.upvotes})`;
+                } catch (error) {
+                    console.error('Error downvoting post:', error);
+                }
+            });
+        });
+    });
+</script>

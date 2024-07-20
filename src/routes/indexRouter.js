@@ -1,13 +1,24 @@
 import { Router } from 'express';
+import Users from '../models/Users.js';
+import Post from '../models/Post.js';
+import Product from '../models/Product.js';
 import accountsRouter from './accountsRouter.js';
+import forumRouter from './forumRouter.js';
 
 const indexRouter = Router();
 
-indexRouter.get('/', (req,res) => {
-    res.render("index", {
-        title: "Index Page"
-    });
-})
+indexRouter.get('/', async (req, res) => {
+    try {
+        const featuredProducts = await Product.find().limit(3); // Fetch featured products  !!!3 for testing!!!!!!
+        res.render('index', {
+            title: "Index Page",
+            featuredProducts
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
 
 indexRouter.get('/about', (req,res) => {
     res.render("about", {
@@ -21,23 +32,45 @@ indexRouter.get('/contact', (req,res) => {
     });
 })
 
-indexRouter.get('/product-details', (req,res) => {
-    res.render("product-details", {
-        title: "Product Details Page"
-    });
-})
+// =================================================================================================
+// GET products page (for all users)
+indexRouter.get('/products', async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.render('products', { products, title: "Products Page" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
 
-indexRouter.get('/products', (req,res) => {
-    res.render("products", {
-        title: "Products Page"
-    });
-})
+indexRouter.get('/product-details/:id', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await Product.findById(productId);
+        
+        if (!product) {
+            return res.status(404).send('Product not found');
+        }
 
-// BEEP BEEP BOOP BOOP underr construction pa to.
-indexRouter.get('/forum', (req, res) => {
-    res.render("forum", {
-        title: "Forum Page"
-    });
+        res.json(product); // Return product data as JSON for the modal
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+// =================================================================================================
+
+// GET forum page
+indexRouter.get('/forum', async (req, res) => {
+    try {
+        const products = await Product.find(); // Fetch products here
+        const posts = await Post.find().populate('author product').sort('-createdAt');
+        res.render('forum', { posts, products, title: "Forum Page" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
 });
 
 indexRouter.get('/signup', (req,res)=>{
@@ -53,5 +86,6 @@ indexRouter.get('/login', (req,res)=>{
 })
 
 indexRouter.use(accountsRouter);
+indexRouter.use(forumRouter);
 
 export default indexRouter;

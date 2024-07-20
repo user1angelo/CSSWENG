@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="/css/admin.css">
+<h1>Product Management</h1>
+
+<form id="add-product-form">
+    <input type="text" name="productName" placeholder="Product Name" required>
+    <input type="number" name="productPrice" placeholder="Price" required>
+    <input type="number" name="productCode" placeholder="Product Code" required>
+    <textarea name="productDescription" placeholder="Description" required></textarea>
+    <input type="file" name="productImage" accept="image/*">
+    <button type="submit">Add Product</button>
+</form>
+
+<h2>Existing Products</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Code</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="product-list">
+        {{#each products}}
+            <tr>
+                <td>{{this.productName}}</td>
+                <td>${{this.productPrice}}</td>
+                <td>{{this.productCode}}</td>
+                <td>{{this.productDescription}}</td>
+                <td><img src="{{this.imageUrl}}" alt="{{this.productName}}" width="50"></td>
+                <td>
+                    <button onclick="editProduct('{{this._id}}')">Edit</button>
+                    <button onclick="deleteProduct('{{this._id}}')">Delete</button>
+                </td>
+            </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<script src="/js/admin-products.js"></script>
