@@ -1,2 +1,76 @@
-<h1>Forum</h1>
-<p>This page is under construction. Check back soon for our community forum!</p>
+<link rel="stylesheet" href="/css/forum.css">
+<div class="forum-container">
+    <h1 class="forum-title">Welcome to our Forum Page</h1>
+    <h2>Remember to be kind..</h2>
+    {{#if session.user}}
+    <form class="post-form" action="/forum/post" method="POST">
+        <input type="text" name="title" placeholder="Review Title" required>
+        <select name="productId" required>
+            {{#each products}}
+                <option value="{{this._id}}">{{this.productName}}</option>
+            {{/each}}
+        </select>
+        <textarea name="content" placeholder="Write your review here" required></textarea>
+        <button type="submit">Post Review</button>
+    </form>
+    {{else}}
+        <p>Please <a href="/login">log in</a> to post a review.</p>
+    {{/if}}
+
+    {{#each posts}}
+        <div class="post">
+            <div class="post-header">
+                <img src="{{this.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
+                <h2><a href="/forum/post/{{this._id}}">{{this.title}}</a></h2>
+                <p class="post-meta">By {{this.author.email}} on {{this.product.productName}}</p>
+            </div>
+            <p class="post-content">{{this.content}}</p>
+            <div class="vote-buttons">
+                <button class="upvote" data-id="{{this._id}}" data-type="post">Upvote ({{this.upvotes.length}})</button>
+                <button class="downvote" data-id="{{this._id}}" data-type="post">Downvote ({{this.downvotes.length}})</button>
+            </div>
+            <p class="comment-count">Comments: {{this.comments.length}}</p>
+        </div>
+    {{/each}}
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.upvote').forEach(button => {
+            button.addEventListener('click', async () => {
+                const postId = button.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/forum/post/${postId}/upvote`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const result = await response.json();
+                    button.innerText = `Upvote (${result.upvotes})`;
+                    button.nextElementSibling.innerText = `Downvote (${result.downvotes})`;
+                } catch (error) {
+                    console.error('Error upvoting post:', error);
+                }
+            });
+        });
+
+        document.querySelectorAll('.downvote').forEach(button => {
+            button.addEventListener('click', async () => {
+                const postId = button.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/forum/post/${postId}/downvote`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const result = await response.json();
+                    button.innerText = `Downvote (${result.downvotes})`;
+                    button.previousElementSibling.innerText = `Upvote (${result.upvotes})`;
+                } catch (error) {
+                    console.error('Error downvoting post:', error);
+                }
+            });
+        });
+    });
+</script>

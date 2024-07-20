@@ -1,15 +1,30 @@
-{{!-- Experimenting pls wait --}}
+{{!-- profile.hbs --}}
 <link rel="stylesheet" href="/css/profile.css">
 <div class="profile-container">
     <h1>User Profile Page</h1>
     <div class="profile-info">
         <div class="profile-picture">
-            <img src="{{user.profilePicture}}" alt="Profile Picture">
+            <img src="{{user.profilePicture}}" alt="Profile Picture" onerror="this.src='/img/default-profile.png'">
         </div>
         <div class="user-details">
             <h2>{{user.email}}</h2>
-            <p>Account created at this date: {{user.createdAt}}</p>
-            <p class="bio">{{user.bio}}</p>
+            <p>Account created at: {{user.createdAt}}</p>
+            <p class="bio">{{#if user.bio}}{{user.bio}}{{else}}No bio available{{/if}}</p>
         </div>
     </div>
+
+    {{#if session.user}}
+        <h2>Edit Profile</h2>
+    <form class="edit-profile-form" action="/profile/update" method="POST" enctype="multipart/form-data">
+        <label for="bio">Bio:</label>
+        <textarea id="bio" name="bio">{{user.bio}}</textarea>
+
+        <label for="profilePicture">Profile Picture:</label>
+        <input type="file" id="profilePicture" name="profilePicture">
+
+        <button type="submit">Update Profile</button>
+    </form>
+    {{else}}
+        <p>Please <a href="/login">log in</a> to edit your profile.</p>
+    {{/if}}
 </div>

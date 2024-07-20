@@ -1,0 +1,155 @@
+.forum-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1A1A1A;
+    border-radius: 5px;
+}
+
+.forum-title {
+    font-size: 24px;
+    color: #EEEEEE;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 50px;
+    height: 50px; 
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-picture img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.post-form {
+    background-color: #222222;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.post-form input[type="text"],
+.post-form select,
+.post-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #333333;
+    border: 1px solid #444444;
+    color: #EEEEEE;
+    border-radius: 3px;
+}
+
+.post-form button {
+    background-color: #A91D3A;
+    color: #EEEEEE;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.post {
+    background-color: #222222;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.post h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.post h2 a {
+    color: #A91D3A;
+    text-decoration: none;
+}
+
+.post-meta {
+    font-size: 14px;
+    color: #888888;
+    margin-bottom: 10px;
+}
+
+.post-content {
+    color: #EEEEEE;
+    margin-bottom: 10px;
+}
+
+.vote-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.upvote,
+.downvote {
+    background-color: #333333;
+    color: #EEEEEE;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.upvote:hover {
+    background-color: #4CAF50;
+}
+
+.downvote:hover {
+    background-color: #F44336;
+}
+
+.comment-count {
+    font-size: 14px;
+    color: #888888;
+}
+
+/* 
+
+    Styles for individual post page
+    Since I do not want to create a "post.css" page lol.
+
+*/
+.single-post {
+    background-color: #222222;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.comment {
+    background-color: #2A2A2A;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+
+.comment-form {
+    margin-top: 20px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #333333;
+    border: 1px solid #444444;
+    color: #EEEEEE;
+    border-radius: 3px;
+}
+
+.comment-form button {
+    background-color: #A91D3A;
+    color: #EEEEEE;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+}

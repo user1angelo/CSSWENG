@@ -16,6 +16,10 @@ const usersSchema = new Schema({
         type: SchemaTypes.String,
         required: true
     },
+    isAdmin: {
+        type: SchemaTypes.Boolean,
+        default: false
+    },
     profilePicture: {
         type: SchemaTypes.String,
         default: '/img/default-profile.jpg' // guys, go check profile picture hehe

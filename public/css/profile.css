@@ -3,34 +3,85 @@
     styles.css has 350+ lines e HAHAHAHHA
 
 */
+body {
+    background-color: #1e1e1e; /* Dark background for the entire page */
+    color: #f5f5f5; /* Light text color */
+    font-family: Arial, sans-serif; /* Choose a readable font */
+}
+
+/* Profile Container */
 .profile-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #333; /* Dark background */
+    color: #f4f4f4; /* Light text */
 }
+
+/* Profile Info */
 .profile-info {
     display: flex;
     align-items: flex-start;
-
-
+    border: 1px solid #444; /* Slight border for separation */
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #222; /* Darker background */
 }
 
+/* Profile Picture */
 .profile-picture img {
     width: 200px;
     height: 200px;
     object-fit: cover;
     border-radius: 50%;
     margin-right: 20px;
+    border: 2px solid #f4f4f4; /* Light border around profile picture */
 }
 
+/* User Details */
 .user-details h2 {
     margin-top: 0;
+    color: #fff; /* Bright text color */
+}
+
+/* Bio */
+.bio {
+    font-style: italic;
+    color: #ccc; /* Slightly lighter text color for bio */
 }
 
 
+/* Form styles */
+.edit-profile-form {
+    margin-top: 20px;
+}
 
+.edit-profile-form label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #f5f5f5; /* Bright color for form labels */
+}
 
+.edit-profile-form textarea,
+.edit-profile-form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #555; /* Border color for input fields */
+    background-color: #444; /* Dark background for input fields */
+    color: #f5f5f5; /* Bright text color in input fields */
+}
 
-.bio {
-    font-style: italic;
+.edit-profile-form button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #555; /* Dark button background */
+    color: #f5f5f5; /* Bright button text */
+    cursor: pointer;
+}
+
+.edit-profile-form button:hover {
+    background-color: #666; /* Slightly lighter button background on hover */
 }

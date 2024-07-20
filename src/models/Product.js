@@ -16,8 +16,11 @@ const productSchema = new Schema({
     productDescription: {
         type: SchemaTypes.String,
         required: true
+    },
+    imageUrl: {
+        type: SchemaTypes.String
     }
-
 });
 
+const Product = model('Product', productSchema);
 export default Product;
