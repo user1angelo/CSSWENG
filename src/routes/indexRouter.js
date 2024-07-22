@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import Users from '../models/Users.js';
 import Post from '../models/Post.js';
 import Product from '../models/Product.js';
+import Announcement from '../models/Announcement.js';
 import accountsRouter from './accountsRouter.js';
 import forumRouter from './forumRouter.js';
 
@@ -9,11 +9,38 @@ const indexRouter = Router();
 
 indexRouter.get('/', async (req, res) => {
     try {
-        const featuredProducts = await Product.find().limit(3); // Fetch featured products  !!!3 for testing!!!!!!
+        const featuredProducts = await Product.find().limit(3);
+        const announcements = await Announcement.find().sort('-createdAt');
+        const isAdmin = req.session.user && req.session.user.isAdmin;
+
         res.render('index', {
             title: "Index Page",
-            featuredProducts
+            featuredProducts,
+            announcements,
+            isAdmin
         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
+// POST create announcement
+indexRouter.post('/create-announcement', async (req, res) => {
+    try {
+        if (!req.session.user || !req.session.user.isAdmin) {
+            return res.status(403).send('Forbidden');
+        }
+
+        const { title, body } = req.body;
+        const newAnnouncement = new Announcement({
+            title,
+            body,
+            createdAt: new Date()
+        });
+
+        await newAnnouncement.save();
+        res.redirect('/');
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
