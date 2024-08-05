@@ -28,7 +28,15 @@ const commentSchema = new Schema({
     createdAt: {
         type: SchemaTypes.Date,
         default: Date.now
-    }
+    },
+    upvotes: [{
+        type: SchemaTypes.ObjectId,
+        ref: 'User'
+    }],
+    downvotes: [{
+        type: SchemaTypes.ObjectId,
+        ref: 'User'
+    }],
 });
 
 const Comment = model('Comment', commentSchema);

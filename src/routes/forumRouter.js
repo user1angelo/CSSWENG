@@ -26,7 +26,9 @@ forumRouter.get('/forum', async (req, res) => {
         const posts = await Post.find().populate('author product').sort('-createdAt');
         const products = await Product.find(); // Fetch all products
 
+
         res.render('forum', { posts, products }); // Pass both posts and products
+        
     } catch (err) {
         res.status(500).send('Server error');
     }
@@ -54,6 +56,7 @@ forumRouter.post('/forum/post', async (req, res) => {
             title,
             content
         });
+
 
         await post.save();
         res.redirect('/forum');
@@ -109,6 +112,57 @@ forumRouter.post('/forum/post/:id/downvote', async (req, res) => {
     }
 });
 
+//-------------------------------------------------------------------------------------------------
+
+// Upvote a Comment
+forumRouter.post('/forum/comment/:id/upvote', async (req, res) => {
+    if (!req.session.user) return res.status(401).send('Unauthorized');
+    console.log("Upvote request received");
+
+    try {
+        console.log("Upvote request received for post:", req.params.id);
+
+        const comment = await Comment.findById(req.params.id);
+        if (!comment) return res.status(404).send('Post not found');
+
+        if (!comment.upvotes.includes(req.session.user._id)) {
+            comment.upvotes.push(req.session.user._id);
+            comment.downvotes.pull(req.session.user._id); // Remove from downvotes if exists
+            await comment.save();
+        }
+        res.send({ upvotes: comment.upvotes.length, downvotes: comment.downvotes.length });
+    } catch (err) {
+        console.error('Error upvoting comment:', err);
+        res.status(500).send('Error upvoting comment');
+    }
+});
+
+
+// Downvote a Comment
+forumRouter.post('/forum/comment/:id/downvote', async (req, res) => {
+    if (!req.session.user) return res.status(401).send('Unauthorized');
+    console.log("Downvote request received");
+
+    try {
+        console.log("Downvote request received for post:", req.params.id);
+
+        const comment = await Comment.findById(req.params.id);
+        if (!comment) return res.status(404).send('Post not found');
+
+        if (!comment.downvotes.includes(req.session.user._id)) {
+            comment.downvotes.push(req.session.user._id);
+            comment.upvotes.pull(req.session.user._id); // Remove from upvotes if exists
+            await comment.save();
+        }
+        res.send({ upvotes: comment.upvotes.length, downvotes: comment.downvotes.length });
+    } catch (err) {
+        console.error('Error downvoting comment:', err);
+        res.status(500).send('Error downvoting comment');
+    }
+});
+
+
+
 // Add a comment
 forumRouter.post('/forum/post/:id/comment', async (req, res) => {
     if (!req.session.user) return res.status(401).send('Unauthorized');
@@ -163,6 +217,10 @@ forumRouter.get('/forum/post/:id', async (req, res) => {
                 populate: {
                     path: 'author',
                     select: 'email' 
+                },
+                populate: {
+                    path: 'author',
+                    select: 'profilePicture'
                 }
             })
             .populate({
@@ -172,10 +230,15 @@ forumRouter.get('/forum/post/:id', async (req, res) => {
                     populate: {
                         path: 'author',
                         select: 'email'
+                    },
+                    populate: {
+                        path: 'author',
+                        select: 'profilePicture'
                     }
                 }
             })
             .populate('author', 'email')
+            .populate('author', 'profilePicture')
             .populate('product', 'productName');
 
         if (!post) return res.status(404).send('Post not found');

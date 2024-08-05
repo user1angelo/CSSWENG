@@ -3,8 +3,8 @@
 <div class="forum-container">
     <div class="single-post">
         <h1>{{post.title}}</h1>
-        <div class="profile-picture">
-            <img src="{{post.author.profilePicture}}" alt="Profile Picture">
+        <div class="post-header">
+            <img src="{{post.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
         </div>
         <p class="post-meta">By {{post.author.email}} on {{post.product.productName}}</p>
         <p class="post-content">{{post.content}}</p>
@@ -17,20 +17,29 @@
     <h2>Comments</h2>
     {{#each post.comments}}
         <div class="comment">
-            <div class="profile-picture">
-                <img src="{{this.author.profilePicture}}" alt="Profile Picture">
+            <div class="post-header">
+                <img src="{{this.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
             </div>
             <p><strong>{{this.author.email}}:</strong> {{this.content}}</p>
+            <div class="vote-buttons">
+                    <button class="upvote-com" data-id="{{this._id}}">Upvote ({{this.upvotes.length}})</button>
+                    <button class="downvote-com" data-id="{{this._id}}">Downvote ({{this.downvotes.length}})</button>
+                </div>
             <form class="reply-form" action="/forum/post/{{../post._id}}/comment/{{this._id}}/reply" method="POST">
                 <textarea name="content" placeholder="Write a reply" required></textarea>
+                
                 <button type="submit">Reply</button>
             </form>
             {{#each this.replies}}
                 <div class="reply">
-                    <div class="profile-picture">
-                        <img src="{{this.author.profilePicture}}" alt="Profile Picture">
+                    <div class="post-header">
+                        <img src="{{this.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
                     </div>
                     <p><strong>{{this.author.email}}:</strong> {{this.content}}</p>
+                    <div class="vote-buttons">
+                        <button class="upvote-com" data-id="{{this._id}}" data-type="post">Upvote ({{this.upvotes.length}})</button>
+                        <button class="downvote-com" data-id="{{this._id}}" data-type="post">Downvote ({{this.downvotes.length}})</button>
+                    </div>
                 </div>
             {{/each}}
         </div>
@@ -84,5 +93,48 @@
                 }
             });
         });
+
+        // Upvote comment
+        document.querySelectorAll('.upvote-com').forEach(button => {
+            button.addEventListener('click', async () => {
+                const commentId = button.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/forum/comment/${commentId}/upvote`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const result = await response.json();
+                    button.innerText = `Upvote (${result.upvotes})`;
+                    button.nextElementSibling.innerText = `Downvote (${result.downvotes})`;
+                } catch (error) {
+                    console.error('Error upvoting post:', error);
+                }
+            });
+        });
+
+
+        // Downvote comment
+        document.querySelectorAll('.downvote-com').forEach(button => {
+            button.addEventListener('click', async () => {
+                const commentId = button.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/forum/comment/${commentId}/downvote`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const result = await response.json();
+                    button.innerText = `Downvote (${result.downvotes})`;
+                    button.previousElementSibling.innerText = `Upvote (${result.upvotes})`;
+                } catch (error) {
+                    console.error('Error downvoting post:', error);
+                }
+            });
+        });
+
+
     });
 </script>
