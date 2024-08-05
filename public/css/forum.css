@@ -89,7 +89,9 @@
 }
 
 .upvote,
-.downvote {
+.downvote,
+.upvote-com,
+.downvote-com {
     background-color: #333333;
     color: #EEEEEE;
     border: none;

@@ -72,7 +72,7 @@ accountsRouter.post("/login-verify", async (req, res) =>{
         const user = await Users.findOne({email: req.body.email});
 
         if (user && await bcrypt.compare(req.body.password, user.password)) {
-            req.session.user = { _id: user._id, email: user.email, isAdmin: user.isAdmin }; // Make sure _id is set
+            req.session.user = { _id: user._id, email: user.email, isAdmin: user.isAdmin, profilePicture: user.profilePicture }; // Make sure _id is set
             res.statusMessage = "Login Successful";
             res.status(200).end();
             console.log("SUCCESS: Login successful");

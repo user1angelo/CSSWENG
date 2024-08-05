@@ -19,6 +19,11 @@ async function main() {
     // Configure Handlebars with runtime options
     app.engine('hbs', exphbs.engine({
         extname: 'hbs',
+        helpers: {
+            eq: function (a,b){
+                return a===b
+            }
+        },
         runtimeOptions: {
             allowProtoPropertiesByDefault: true,
             allowProtoMethodsByDefault: true

@@ -7,11 +7,18 @@
             <img src="{{post.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
         </div>
         <p class="post-meta">By {{post.author.email}} on {{post.product.productName}}</p>
-        <p class="post-content">{{post.content}}</p>
+        <p class="post-content" id="postContent">{{post.content}}</p>
         <div class="vote-buttons">
             <button class="upvote" data-id="{{post._id}}">Upvote ({{post.upvotes.length}})</button>
             <button class="downvote" data-id="{{post._id}}">Downvote ({{post.downvotes.length}})</button>
         </div>
+        
+        <!--eq is a helper from index.js-->
+        {{#if (eq post.author.email session.user.email)}}
+            <div id="editContainer">
+                <button id="editButton">Edit Comment</button>
+            </div>
+        {{/if}}
     </div>
 
     <h2>Comments</h2>
@@ -20,28 +27,28 @@
             <div class="post-header">
                 <img src="{{this.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
             </div>
-            <p><strong>{{this.author.email}}:</strong> {{this.content}}</p>
+            <p><strong>{{this.author.email}}:</strong> <br><br> {{this.content}}</p>
             <div class="vote-buttons">
                     <button class="upvote-com" data-id="{{this._id}}">Upvote ({{this.upvotes.length}})</button>
                     <button class="downvote-com" data-id="{{this._id}}">Downvote ({{this.downvotes.length}})</button>
                 </div>
-            <form class="reply-form" action="/forum/post/{{../post._id}}/comment/{{this._id}}/reply" method="POST">
-                <textarea name="content" placeholder="Write a reply" required></textarea>
-                
-                <button type="submit">Reply</button>
-            </form>
             {{#each this.replies}}
                 <div class="reply">
                     <div class="post-header">
                         <img src="{{this.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
                     </div>
-                    <p><strong>{{this.author.email}}:</strong> {{this.content}}</p>
+                    <p><strong>{{this.author.email}}:</strong> <br><br> {{this.content}}</p>
                     <div class="vote-buttons">
                         <button class="upvote-com" data-id="{{this._id}}" data-type="post">Upvote ({{this.upvotes.length}})</button>
                         <button class="downvote-com" data-id="{{this._id}}" data-type="post">Downvote ({{this.downvotes.length}})</button>
                     </div>
                 </div>
             {{/each}}
+            <form class="reply-form" action="/forum/post/{{../post._id}}/comment/{{this._id}}/reply" method="POST">
+                <textarea name="content" placeholder="Write a reply" required></textarea>
+                
+                <button type="submit">Reply</button>
+            </form>
         </div>
     {{/each}}
 
@@ -135,6 +142,83 @@
             });
         });
 
+
+        // Event listeners have difficulties working on new elements via innerhtml
+        /*
+        document.querySelectorAll('#editButton').forEach(button=> {
+            button.addEventListener('click', async () => {
+                const postContentElem = document.getElementById('postContent');
+                
+                postContentElem.innerHTML= `<textarea id="editTextArea rows="4" cols="50" >{{post.content}}</textarea><br>
+                                            <button onclick="savePostEdits()">Save Changes</button>
+                                            <button onclick="cancelEditButton()">Cancel</button> `
+
+
+                function cancelEditButton() {
+                    const postContentElem = document.getElementById('postContent');
+                
+                    postContentElem.innerHTML= `{{post.content}}`
+                }
+
+            });
+        });
+        */
+
+
+        // Solution Event Delegation
+        document.getElementById('editContainer').addEventListener('click', function(event) {
+            if (event.target && event.target.id === 'editButton') {
+                editPostContent();
+            } else if (event.target && event.target.id === 'saveButton') {
+                savePostContent();
+            } else if (event.target && event.target.id === 'cancelButton') {         
+                cancelEdit();
+            }
+        });
+
+        function editPostContent(){
+            const postContentElem = document.getElementById('postContent');
+            const editContainer = document.getElementById('editContainer');
+
+
+            postContentElem.innerHTML= `<textarea id="editTextArea" rows="4" cols="50" >{{post.content}}</textarea><br>`
+            editContainer.innerHTML=`<button id="saveButton" data-id="{{post._id}}" >Save Changes</button>
+                                     <button id="cancelButton">Cancel</button> `
+
+        };
+
+
+        async function savePostContent(){
+            const save = document.getElementById('saveButton');
+            const postid = save.getAttribute('data-id');
+            const newContent = document.getElementById("editTextArea").value;
+            
+            try{                        
+                const response = await fetch(`/forum/post/update/${postid}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({content: newContent})
+                })
+
+                const result = await response.json();
+                console.log(response)
+                window.location.reload()
+            }catch (err){
+                console.error('Error updating post:', err);
+            }
+        };
+
+
+        function cancelEdit(){
+            const postContentElem = document.getElementById('postContent');
+            const editContainer = document.getElementById('editContainer');
+            
+            postContentElem.innerHTML= `{{post.content}}`
+            editContainer.innerHTML=`<button id="editButton">Edit Comment</button>`
+            
+        };
 
     });
 </script>
