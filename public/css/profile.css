@@ -6,7 +6,7 @@
 body {
     background-color: #1e1e1e; /* Dark background for the entire page */
     color: #f5f5f5; /* Light text color */
-    font-family: Arial, sans-serif; /* Choose a readable font */
+    font-family: Arial, sans-serif;
 }
 
 /* Profile Container */
@@ -14,8 +14,8 @@ body {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #333; /* Dark background */
-    color: #f4f4f4; /* Light text */
+    background-color: #333;
+    color: #f4f4f4; 
 }
 
 /* Profile Info */
@@ -25,7 +25,7 @@ body {
     border: 1px solid #444; /* Slight border for separation */
     padding: 20px;
     border-radius: 10px;
-    background-color: #222; /* Darker background */
+    background-color: #222; 
 }
 
 /* Profile Picture */
@@ -35,19 +35,19 @@ body {
     object-fit: cover;
     border-radius: 50%;
     margin-right: 20px;
-    border: 2px solid #f4f4f4; /* Light border around profile picture */
+    border: 2px solid #f4f4f4; 
 }
 
 /* User Details */
 .user-details h2 {
     margin-top: 0;
-    color: #fff; /* Bright text color */
+    color: #fff; 
 }
 
 /* Bio */
 .bio {
     font-style: italic;
-    color: #ccc; /* Slightly lighter text color for bio */
+    color: #ccc;
 }
 
 
@@ -59,7 +59,7 @@ body {
 .edit-profile-form label {
     display: block;
     margin: 10px 0 5px;
-    color: #f5f5f5; /* Bright color for form labels */
+    color: #f5f5f5;
 }
 
 .edit-profile-form textarea,
@@ -68,8 +68,8 @@ body {
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #555; /* Border color for input fields */
-    background-color: #444; /* Dark background for input fields */
-    color: #f5f5f5; /* Bright text color in input fields */
+    background-color: #444; 
+    color: #f5f5f5; 
 }
 
 .edit-profile-form button {
@@ -77,11 +77,48 @@ body {
     padding: 10px 15px;
     border: none;
     border-radius: 4px;
-    background-color: #555; /* Dark button background */
-    color: #f5f5f5; /* Bright button text */
+    background-color: #555; 
+    color: #f5f5f5; 
     cursor: pointer;
 }
 
 .edit-profile-form button:hover {
-    background-color: #666; /* Slightly lighter button background on hover */
+    background-color: #666;
+}
+
+/* User Posts Section newly added as of August 6, 2024 */
+.user-posts {
+    margin-top: 30px;
+}
+
+.user-posts .post {
+    border: 1px solid #444;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #222; 
+    margin-bottom: 15px; 
+}
+
+.user-posts .post h3 {
+    margin: 0;
+    color: #f5f5f5; 
+}
+
+.user-posts .post p {
+    color: #ccc; 
+}
+
+.user-posts .delete-post-btn {
+    background-color: #c44; 
+    color: #fff; 
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.user-posts .delete-post-btn:hover {
+    background-color: #a33; /* Darker red on hover */
 }

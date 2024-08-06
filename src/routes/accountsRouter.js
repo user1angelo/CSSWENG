@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import Users from '../models/Users.js';
 import Product from '../models/Product.js';
+import Post from '../models/Post.js';
 import bcrypt from 'bcrypt';
 import multer from 'multer';
 import path from 'path';
@@ -109,13 +110,15 @@ accountsRouter.get("/profile", async (req, res) => {
         try {
             const user = await Users.findOne({ email: req.session.user.email });
             if (user) {
+                const posts = await Post.find({ author: user._id }).populate('product');
                 res.render('profile', { 
                     user: {
                         email: user.email,
                         createdAt: user.createdAt ? user.createdAt.toLocaleDateString() : 'Unknown',
                         bio: user.bio,
                         profilePicture: user.profilePicture
-                    }
+                    },
+                    posts: posts
                 });
             } else {
                 res.status(404).send("User not found");
@@ -126,6 +129,37 @@ accountsRouter.get("/profile", async (req, res) => {
         }
     } else {
         res.redirect('/login');
+    }
+});
+
+// DELETE post route from profile page :)
+accountsRouter.delete('/profile/posts/:postId', async (req, res) => {
+    try {
+        const postId = req.params.postId;
+
+        // Ensure the user is authenticated
+        if (!req.session.user) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        // Find the post by ID and ensure the current user is the author
+        const post = await Post.findOne({ _id: postId, author: req.session.user._id });
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found or unauthorized' });
+        }
+
+        // Delete the post
+        const result = await Post.findByIdAndDelete(postId);
+
+        if (!result) {
+            throw new Error('Post deletion failed');
+        }
+
+        res.json({ message: 'Post deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting post:', error); // Detailed logging
+        res.status(500).json({ message: 'Error deleting post' });
     }
 });
 
