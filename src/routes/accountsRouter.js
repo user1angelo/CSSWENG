@@ -172,6 +172,20 @@ accountsRouter.get('/products', async (req, res) => {
     }
 });
 
+// GET single product - To fix error attempting to edit product as admin in the product dashboard
+accountsRouter.get('/admin/products/:id', isAdmin, async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.json(product);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching product' });
+    }
+});
+
 // =================================================================================================
 /*
 
@@ -218,8 +232,12 @@ accountsRouter.post('/admin/products', isAdmin, upload.single('productImage'), a
         await newProduct.save();
         res.status(201).json({ message: 'Product added successfully' });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error adding product' });
+        if (error.code === 11000) {
+            res.status(409).json({ message: 'Product code already exists' }); // Duplicate key error code
+        } else {
+            console.error(error);
+            res.status(500).json({ message: 'Error adding product' });
+        }
     }
 });
 
