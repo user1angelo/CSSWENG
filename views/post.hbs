@@ -3,36 +3,52 @@
 <div class="forum-container">
     <div class="single-post">
         <h1>{{post.title}}</h1>
-        <div class="profile-picture">
-            <img src="{{post.author.profilePicture}}" alt="Profile Picture">
+        <div class="post-header">
+            <img src="{{post.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
         </div>
         <p class="post-meta">By {{post.author.email}} on {{post.product.productName}}</p>
-        <p class="post-content">{{post.content}}</p>
+        <p class="post-content" id="postContent">{{post.content}}</p>
         <div class="vote-buttons">
             <button class="upvote" data-id="{{post._id}}">Upvote ({{post.upvotes.length}})</button>
             <button class="downvote" data-id="{{post._id}}">Downvote ({{post.downvotes.length}})</button>
         </div>
+        
+        <!--eq is a helper from index.js-->
+        {{#if (eq post.author.email session.user.email)}}
+            <div id="editContainer">
+                <button id="editButton">Edit Post</button> <!-- Changed to "Edit Post" from "Edit Comment" -->
+            </div>
+        {{/if}}
     </div>
 
     <h2>Comments</h2>
     {{#each post.comments}}
         <div class="comment">
-            <div class="profile-picture">
-                <img src="{{this.author.profilePicture}}" alt="Profile Picture">
+            <div class="post-header">
+                <img src="{{this.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
             </div>
-            <p><strong>{{this.author.email}}:</strong> {{this.content}}</p>
-            <form class="reply-form" action="/forum/post/{{../post._id}}/comment/{{this._id}}/reply" method="POST">
-                <textarea name="content" placeholder="Write a reply" required></textarea>
-                <button type="submit">Reply</button>
-            </form>
+            <p><strong>{{this.author.email}}:</strong> <br><br> {{this.content}}</p>
+            <div class="vote-buttons">
+                    <button class="upvote-com" data-id="{{this._id}}">Upvote ({{this.upvotes.length}})</button>
+                    <button class="downvote-com" data-id="{{this._id}}">Downvote ({{this.downvotes.length}})</button>
+                </div>
             {{#each this.replies}}
                 <div class="reply">
-                    <div class="profile-picture">
-                        <img src="{{this.author.profilePicture}}" alt="Profile Picture">
+                    <div class="post-header">
+                        <img src="{{this.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
                     </div>
-                    <p><strong>{{this.author.email}}:</strong> {{this.content}}</p>
+                    <p><strong>{{this.author.email}}:</strong> <br><br> {{this.content}}</p>
+                    <div class="vote-buttons">
+                        <button class="upvote-com" data-id="{{this._id}}" data-type="post">Upvote ({{this.upvotes.length}})</button>
+                        <button class="downvote-com" data-id="{{this._id}}" data-type="post">Downvote ({{this.downvotes.length}})</button>
+                    </div>
                 </div>
             {{/each}}
+            <form class="reply-form" action="/forum/post/{{../post._id}}/comment/{{this._id}}/reply" method="POST">
+                <textarea name="content" placeholder="Write a reply" required></textarea>
+                
+                <button type="submit">Reply</button>
+            </form>
         </div>
     {{/each}}
 
@@ -84,5 +100,125 @@
                 }
             });
         });
+
+        // Upvote comment
+        document.querySelectorAll('.upvote-com').forEach(button => {
+            button.addEventListener('click', async () => {
+                const commentId = button.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/forum/comment/${commentId}/upvote`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const result = await response.json();
+                    button.innerText = `Upvote (${result.upvotes})`;
+                    button.nextElementSibling.innerText = `Downvote (${result.downvotes})`;
+                } catch (error) {
+                    console.error('Error upvoting post:', error);
+                }
+            });
+        });
+
+
+        // Downvote comment
+        document.querySelectorAll('.downvote-com').forEach(button => {
+            button.addEventListener('click', async () => {
+                const commentId = button.getAttribute('data-id');
+                try {
+                    const response = await fetch(`/forum/comment/${commentId}/downvote`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const result = await response.json();
+                    button.innerText = `Downvote (${result.downvotes})`;
+                    button.previousElementSibling.innerText = `Upvote (${result.upvotes})`;
+                } catch (error) {
+                    console.error('Error downvoting post:', error);
+                }
+            });
+        });
+
+
+        // Event listeners have difficulties working on new elements via innerhtml
+        /*
+        document.querySelectorAll('#editButton').forEach(button=> {
+            button.addEventListener('click', async () => {
+                const postContentElem = document.getElementById('postContent');
+                
+                postContentElem.innerHTML= `<textarea id="editTextArea rows="4" cols="50" >{{post.content}}</textarea><br>
+                                            <button onclick="savePostEdits()">Save Changes</button>
+                                            <button onclick="cancelEditButton()">Cancel</button> `
+
+
+                function cancelEditButton() {
+                    const postContentElem = document.getElementById('postContent');
+                
+                    postContentElem.innerHTML= `{{post.content}}`
+                }
+
+            });
+        });
+        */
+
+
+        // Solution Event Delegation
+        document.getElementById('editContainer').addEventListener('click', function(event) {
+            if (event.target && event.target.id === 'editButton') {
+                editPostContent();
+            } else if (event.target && event.target.id === 'saveButton') {
+                savePostContent();
+            } else if (event.target && event.target.id === 'cancelButton') {         
+                cancelEdit();
+            }
+        });
+
+        function editPostContent(){
+            const postContentElem = document.getElementById('postContent');
+            const editContainer = document.getElementById('editContainer');
+
+
+            postContentElem.innerHTML= `<textarea id="editTextArea" rows="4" cols="50" >{{post.content}}</textarea><br>`
+            editContainer.innerHTML=`<button id="saveButton" data-id="{{post._id}}" >Save Changes</button>
+                                     <button id="cancelButton">Cancel</button> `
+
+        };
+
+
+        async function savePostContent(){
+            const save = document.getElementById('saveButton');
+            const postid = save.getAttribute('data-id');
+            const newContent = document.getElementById("editTextArea").value;
+            
+            try{                        
+                const response = await fetch(`/forum/post/update/${postid}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({content: newContent})
+                })
+
+                const result = await response.json();
+                console.log(response)
+                window.location.reload()
+            }catch (err){
+                console.error('Error updating post:', err);
+            }
+        };
+
+
+        function cancelEdit(){
+            const postContentElem = document.getElementById('postContent');
+            const editContainer = document.getElementById('editContainer');
+            
+            postContentElem.innerHTML= `{{post.content}}`
+            editContainer.innerHTML=`<button id="editButton">Edit Comment</button>`
+            
+        };
+
     });
 </script>

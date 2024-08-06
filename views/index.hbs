@@ -5,3 +5,25 @@
     <p>Discover the best dashcams for your car and never miss a detail.</p>
     <button onclick="window.location.href='/products';">Shop Now</button>
 </section>
+
+<section id="announcements" class="announcements">
+    <h2>Announcements</h2>
+    {{#each announcements}}
+        <div class="announcement">
+            <h3>{{this.title}}</h3>
+            <p>{{this.body}}</p>
+            <span>{{this.createdAt}}</span>
+        </div>
+    {{/each}}
+    
+    {{#if isAdmin}}
+    <div class="announcement-form">
+        <h3>Create New Announcement</h3>
+        <form action="/create-announcement" method="POST">
+            <input type="text" name="title" placeholder="Title" required>
+            <textarea name="body" placeholder="Body" required></textarea>
+            <button type="submit">Post</button>
+        </form>
+    </div>
+    {{/if}}
+</section>
