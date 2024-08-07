@@ -174,11 +174,15 @@ forumRouter.post('/forum/post/:id/comment', async (req, res) => {
             content: req.body.content,
             post: req.params.id
         });
+
+        console.log(comment)
         await comment.save();
-        
+        console.log("Success First checkpoint");
+
         const post = await Post.findById(req.params.id);
         post.comments.push(comment._id);
         await post.save();
+        console.log("Success Second checkpoint");
         
         res.redirect(`/forum/post/${req.params.id}`);
     } catch (err) {
@@ -246,8 +250,9 @@ forumRouter.get('/forum/post/:id', async (req, res) => {
 // Edit Post Content
 forumRouter.put('/forum/post/update/:id', async (req,res) =>{
     try{
+        const newTitle = req.body.postTitle;
         const updated = req.body.content;
-        const post = await Post.findById(req.params.id).updateOne({$set: {content: updated}})
+        const post = await Post.findById(req.params.id).updateOne({$set: {title: newTitle, content: updated}})
 
         if (!post) return res.status(404).send('Post not found');
 

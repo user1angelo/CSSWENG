@@ -534,6 +534,16 @@ footer {
     margin-right: 10px;
 }
 
+#errorMsg {
+    color: red;
+    display: none;
+}
+
+#titleErrorMsg {
+    color: red;
+    display: none;
+}
+
 @media (max-width: 768px) {
     .footer-content {
         flex-direction: column;

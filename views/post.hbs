@@ -2,12 +2,14 @@
 <link rel="stylesheet" href="/css/profile.css">
 <div class="forum-container">
     <div class="single-post">
-        <h1>{{post.title}}</h1>
+        <h1 id="postTitle">{{post.title}}</h1>
+        <p id="titleErrorMsg"> Title should not be empty!</p>
         <div class="post-header">
             <img src="{{post.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
         </div>
         <p class="post-meta">By {{post.author.email}} on {{post.product.productName}}</p>
         <p class="post-content" id="postContent">{{post.content}}</p>
+        <p id="errorMsg"> Post content should not be empty!</p>
         <div class="vote-buttons">
             <button class="upvote" data-id="{{post._id}}">Upvote ({{post.upvotes.length}})</button>
             <button class="downvote" data-id="{{post._id}}">Downvote ({{post.downvotes.length}})</button>
@@ -27,21 +29,39 @@
             <div class="post-header">
                 <img src="{{this.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
             </div>
-            <p><strong>{{this.author.email}}:</strong> <br><br> {{this.content}}</p>
+            <p><strong>{{this.author.email}}:</strong></p>
+            <p id="{{this._id}}">{{this.content}}</p>
             <div class="vote-buttons">
-                    <button class="upvote-com" data-id="{{this._id}}">Upvote ({{this.upvotes.length}})</button>
-                    <button class="downvote-com" data-id="{{this._id}}">Downvote ({{this.downvotes.length}})</button>
-                </div>
+                <button class="upvote-com" data-id="{{this._id}}">Upvote ({{this.upvotes.length}})</button>
+                <button class="downvote-com" data-id="{{this._id}}">Downvote ({{this.downvotes.length}})</button><br><br>
+            </div>
+            <!--
+            {{#if (eq this.author.email ../session.user.email)}}
+            <div class="editContainer">
+                <button id="editCommentButton" data-id="{{this._id}}">Edit Comment</button> 
+                {{this._id}}
+            </div>
+            {{/if}}
+            -->
             {{#each this.replies}}
+                <br>
                 <div class="reply">
                     <div class="post-header">
                         <img src="{{this.author.profilePicture}}" alt="Profile Picture" class="profile-picture">
                     </div>
-                    <p><strong>{{this.author.email}}:</strong> <br><br> {{this.content}}</p>
+                    <p><strong>{{this.author.email}}:</strong></p>
+                    <p id="{{this._id}}">{{this.content}}</p>
                     <div class="vote-buttons">
                         <button class="upvote-com" data-id="{{this._id}}" data-type="post">Upvote ({{this.upvotes.length}})</button>
                         <button class="downvote-com" data-id="{{this._id}}" data-type="post">Downvote ({{this.downvotes.length}})</button>
                     </div>
+                    <!--
+                    {{#if (eq this.author.email session.user.email)}}
+                        <div id="editContainer">
+                            <button id="editCommentButton" data-id="{{this._id}}">Edit Comment</button> 
+                        </div>
+                    {{/if}}
+                    -->
                 </div>
             {{/each}}
             <form class="reply-form" action="/forum/post/{{../post._id}}/comment/{{this._id}}/reply" method="POST">
@@ -175,13 +195,26 @@
                 cancelEdit();
             }
         });
-
+            /*
+            else if (event.target && event.target.id === 'editCommentButton') {
+                const commentId = event.target.getAttribute('data-id');
+                console.log(commentId)
+                editComment(commentId);
+            }
+            else if (event.target && event.target.id === 'saveCommentButton') {
+                
+            }
+            else if (event.target && event.target.id === 'cancelCommentButton') {
+                
+            }*/
+        
         function editPostContent(){
             const postContentElem = document.getElementById('postContent');
             const editContainer = document.getElementById('editContainer');
+            const postTitle = document.getElementById('postTitle');
 
-
-            postContentElem.innerHTML= `<textarea id="editTextArea" rows="4" cols="50" >{{post.content}}</textarea><br>`
+            postTitle.innerHTML = `<textarea id="editTitleArea" rows="3" cols="30" required>{{post.title}}</textarea><br>`
+            postContentElem.innerHTML= `<textarea id="editTextArea" rows="4" cols="50" required>{{post.content}}</textarea><br>`
             editContainer.innerHTML=`<button id="saveButton" data-id="{{post._id}}" >Save Changes</button>
                                      <button id="cancelButton">Cancel</button> `
 
@@ -191,22 +224,39 @@
         async function savePostContent(){
             const save = document.getElementById('saveButton');
             const postid = save.getAttribute('data-id');
+            const newTitle = document.getElementById('editTitleArea').value;
             const newContent = document.getElementById("editTextArea").value;
             
-            try{                        
-                const response = await fetch(`/forum/post/update/${postid}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({content: newContent})
-                })
+            const titleErrorMsg = document.getElementById('titleErrorMsg');
+            const errorMsg = document.getElementById('errorMsg');
 
-                const result = await response.json();
-                console.log(response)
-                window.location.reload()
-            }catch (err){
-                console.error('Error updating post:', err);
+            if(newTitle.trim() === ''){
+                titleErrorMsg.style.display = 'block';
+            }else if(newContent.trim() === ''){
+                errorMsg.style.display = 'block';
+            }else{
+                try{                        
+                    const response = await fetch(`/forum/post/update/${postid}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            postTitle: newTitle,
+                            content: newContent
+                            })
+                    })
+
+                    const result = await response.json();
+                    console.log(response)
+
+                    titleErrorMsg.style.display = 'none';
+                    errorMsg.style.display = 'none';
+
+                    window.location.reload()
+                }catch (err){
+                    console.error('Error updating post:', err);
+                }
             }
         };
 
@@ -217,8 +267,31 @@
             
             postContentElem.innerHTML= `{{post.content}}`
             editContainer.innerHTML=`<button id="editButton">Edit Comment</button>`
+
+            titleErrorMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
             
         };
 
+        /*
+        function editComment( commentid ){
+            const postContentElem = document.getElementById('postContent');
+
+            const commentContent = document.getElementById('${commentid}');
+            const editContainer = document.getElementById('editContainer');
+
+            commentContent.innerHTML= `<textarea id="editTextArea" rows="4" cols="50" required>{{this.content}}</textarea><br>`
+            editContainer.innerHTML=`<button id="saveCommentButton" data-id="${commentid}" >Save Changes</button>
+                                     <button id="cancelCommentButton">Cancel</button> `
+        };
+
+        function saveComment( commentid ){
+            
+        };
+
+        function cancelComment( commentid ){
+            
+        };
+        */
     });
 </script>
