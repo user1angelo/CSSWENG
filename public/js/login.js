@@ -19,11 +19,11 @@ loginAccount?.addEventListener("click", async (e) => {
         console.log(response);
 
         if(response.status === 200){
+            alert("SUCCESS: Login Successful!");
             console.log("SUCCESS: Login Successful!");
             window.location.href = '/';
         } else{
-            const errorMessage = await response.text();
-            alert(errorMessage);
+            alert("ERROR: Failed to login, make sure your email or password is correct");
             console.log("ERROR: Failed to login account in login.js");
             loginDetails.reset();// Clear form
         }
