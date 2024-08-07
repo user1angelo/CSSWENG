@@ -5,7 +5,7 @@
 
 
 */
-import { SchemaTypes, Schema, model } from 'mongoose';
+import { SchemaTypes, Schema, model, SchemaType } from 'mongoose';
 
 const postSchema = new Schema({
     author: {

@@ -26,13 +26,13 @@
         {{#if session.user}}
             <div class="profile-class">
                 <a href="#" id="profileLink">
-                    <img src="/img/icons/profile-icon.png" alt="profileIcon">
+                    <img src="{{session.user.profilePicture}}" alt="profileIcon" class="profilenav">
                 </a>
             </div>
         {{/if}}
-        <div class="search-cart">
+        {{!-- <div class="search-cart">
             <input type="text" placeholder="Search...">
             <a href="#" class="cart-icon">Cart</a>
-        </div>
+        </div> --}}
     </div>
 </header>

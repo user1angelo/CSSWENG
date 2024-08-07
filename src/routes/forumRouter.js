@@ -26,7 +26,9 @@ forumRouter.get('/forum', async (req, res) => {
         const posts = await Post.find().populate('author product').sort('-createdAt');
         const products = await Product.find(); // Fetch all products
 
+
         res.render('forum', { posts, products }); // Pass both posts and products
+        
     } catch (err) {
         res.status(500).send('Server error');
     }
@@ -50,10 +52,12 @@ forumRouter.post('/forum/post', async (req, res) => {
 
         const post = new Post({
             author: req.session.user._id, // Set author from session
+            profilePicture: req.session.user.profilePicture,
             product: productId,
             title,
             content
         });
+
 
         await post.save();
         res.redirect('/forum');
@@ -109,6 +113,57 @@ forumRouter.post('/forum/post/:id/downvote', async (req, res) => {
     }
 });
 
+//-------------------------------------------------------------------------------------------------
+
+// Upvote a Comment
+forumRouter.post('/forum/comment/:id/upvote', async (req, res) => {
+    if (!req.session.user) return res.status(401).send('Unauthorized');
+    console.log("Upvote request received");
+
+    try {
+        console.log("Upvote request received for post:", req.params.id);
+
+        const comment = await Comment.findById(req.params.id);
+        if (!comment) return res.status(404).send('Post not found');
+
+        if (!comment.upvotes.includes(req.session.user._id)) {
+            comment.upvotes.push(req.session.user._id);
+            comment.downvotes.pull(req.session.user._id); // Remove from downvotes if exists
+            await comment.save();
+        }
+        res.send({ upvotes: comment.upvotes.length, downvotes: comment.downvotes.length });
+    } catch (err) {
+        console.error('Error upvoting comment:', err);
+        res.status(500).send('Error upvoting comment');
+    }
+});
+
+
+// Downvote a Comment
+forumRouter.post('/forum/comment/:id/downvote', async (req, res) => {
+    if (!req.session.user) return res.status(401).send('Unauthorized');
+    console.log("Downvote request received");
+
+    try {
+        console.log("Downvote request received for post:", req.params.id);
+
+        const comment = await Comment.findById(req.params.id);
+        if (!comment) return res.status(404).send('Post not found');
+
+        if (!comment.downvotes.includes(req.session.user._id)) {
+            comment.downvotes.push(req.session.user._id);
+            comment.upvotes.pull(req.session.user._id); // Remove from upvotes if exists
+            await comment.save();
+        }
+        res.send({ upvotes: comment.upvotes.length, downvotes: comment.downvotes.length });
+    } catch (err) {
+        console.error('Error downvoting comment:', err);
+        res.status(500).send('Error downvoting comment');
+    }
+});
+
+
+
 // Add a comment
 forumRouter.post('/forum/post/:id/comment', async (req, res) => {
     if (!req.session.user) return res.status(401).send('Unauthorized');
@@ -138,6 +193,7 @@ forumRouter.post('/forum/post/:postId/comment/:commentId/reply', async (req, res
     try {
         const reply = new Comment({
             author: req.session.user._id,
+            profilePicture: req.session.profilePicture,
             content: req.body.content,
             post: req.params.postId
         });
@@ -162,7 +218,7 @@ forumRouter.get('/forum/post/:id', async (req, res) => {
                 path: 'comments',
                 populate: {
                     path: 'author',
-                    select: 'email' 
+                    select: 'email profilePicture' 
                 }
             })
             .populate({
@@ -171,11 +227,11 @@ forumRouter.get('/forum/post/:id', async (req, res) => {
                     path: 'replies',
                     populate: {
                         path: 'author',
-                        select: 'email'
+                        select: 'email profilePicture'
                     }
                 }
             })
-            .populate('author', 'email')
+            .populate('author', 'email profilePicture')
             .populate('product', 'productName');
 
         if (!post) return res.status(404).send('Post not found');
@@ -185,5 +241,21 @@ forumRouter.get('/forum/post/:id', async (req, res) => {
         res.status(500).send('Error fetching post');
     }
 });
+
+
+// Edit Post Content
+forumRouter.put('/forum/post/update/:id', async (req,res) =>{
+    try{
+        const updated = req.body.content;
+        const post = await Post.findById(req.params.id).updateOne({$set: {content: updated}})
+
+        if (!post) return res.status(404).send('Post not found');
+
+        res.json({message: 'Post Updated Successfully'});
+    }catch (err){
+        res.status(500).send('Error editing Post')
+    }
+})
+
 
 export default forumRouter;

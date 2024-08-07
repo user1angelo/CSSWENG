@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import Users from '../models/Users.js';
 import Product from '../models/Product.js';
+import Post from '../models/Post.js';
 import bcrypt from 'bcrypt';
 import multer from 'multer';
 import path from 'path';
@@ -72,7 +73,7 @@ accountsRouter.post("/login-verify", async (req, res) =>{
         const user = await Users.findOne({email: req.body.email});
 
         if (user && await bcrypt.compare(req.body.password, user.password)) {
-            req.session.user = { _id: user._id, email: user.email, isAdmin: user.isAdmin }; // Make sure _id is set
+            req.session.user = { _id: user._id, email: user.email, isAdmin: user.isAdmin, profilePicture: user.profilePicture }; // Make sure _id is set
             res.statusMessage = "Login Successful";
             res.status(200).end();
             console.log("SUCCESS: Login successful");
@@ -109,13 +110,15 @@ accountsRouter.get("/profile", async (req, res) => {
         try {
             const user = await Users.findOne({ email: req.session.user.email });
             if (user) {
+                const posts = await Post.find({ author: user._id }).populate('product');
                 res.render('profile', { 
                     user: {
                         email: user.email,
                         createdAt: user.createdAt ? user.createdAt.toLocaleDateString() : 'Unknown',
                         bio: user.bio,
                         profilePicture: user.profilePicture
-                    }
+                    },
+                    posts: posts
                 });
             } else {
                 res.status(404).send("User not found");
@@ -126,6 +129,37 @@ accountsRouter.get("/profile", async (req, res) => {
         }
     } else {
         res.redirect('/login');
+    }
+});
+
+// DELETE post route from profile page :)
+accountsRouter.delete('/profile/posts/:postId', async (req, res) => {
+    try {
+        const postId = req.params.postId;
+
+        // Ensure the user is authenticated
+        if (!req.session.user) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        // Find the post by ID and ensure the current user is the author
+        const post = await Post.findOne({ _id: postId, author: req.session.user._id });
+
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found or unauthorized' });
+        }
+
+        // Delete the post
+        const result = await Post.findByIdAndDelete(postId);
+
+        if (!result) {
+            throw new Error('Post deletion failed');
+        }
+
+        res.json({ message: 'Post deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting post:', error); // Detailed logging
+        res.status(500).json({ message: 'Error deleting post' });
     }
 });
 
@@ -169,6 +203,20 @@ accountsRouter.get('/products', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
+    }
+});
+
+// GET single product - To fix error attempting to edit product as admin in the product dashboard
+accountsRouter.get('/admin/products/:id', isAdmin, async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.json(product);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching product' });
     }
 });
 
@@ -218,8 +266,12 @@ accountsRouter.post('/admin/products', isAdmin, upload.single('productImage'), a
         await newProduct.save();
         res.status(201).json({ message: 'Product added successfully' });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error adding product' });
+        if (error.code === 11000) {
+            res.status(409).json({ message: 'Product code already exists' }); // Duplicate key error code
+        } else {
+            console.error(error);
+            res.status(500).json({ message: 'Error adding product' });
+        }
     }
 });
 

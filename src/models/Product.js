@@ -7,7 +7,8 @@ const productSchema = new Schema({
     },
     productCode: {
         type: SchemaTypes.Number,
-        required: true
+        required: true,
+        unique: true // Ensure productCode is unique so that the products dont share the same code :)
     },
     productPrice: {
         type: SchemaTypes.Number,

@@ -26,17 +26,35 @@
         {{#each products}}
             <tr>
                 <td>{{this.productName}}</td>
-                <td>${{this.productPrice}}</td>
+                <td>₱{{this.productPrice}}</td>
                 <td>{{this.productCode}}</td>
                 <td>{{this.productDescription}}</td>
                 <td><img src="{{this.imageUrl}}" alt="{{this.productName}}" width="50"></td>
                 <td>
-                    <button onclick="editProduct('{{this._id}}')">Edit</button>
+                    <button onclick="openEditModal('{{this._id}}')">Edit</button>
                     <button onclick="deleteProduct('{{this._id}}')">Delete</button>
                 </td>
             </tr>
         {{/each}}
     </tbody>
 </table>
+
+<!-- Edit Product Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Product</h2>
+        <form id="edit-product-form">
+            <input type="text" id="edit-productName" name="productName" required>
+            <input type="number" id="edit-productPrice" name="productPrice" required>
+            <input type="number" id="edit-productCode" name="productCode" required>
+            <textarea id="edit-productDescription" name="productDescription" required></textarea>
+            <input type="file" id="edit-productImage" name="productImage" accept="image/*">
+            <img id="current-product-image" src="" alt="Current Product Image" width="100">
+            <input type="hidden" id="edit-productId" name="productId">
+            <button type="submit">Update Product</button>
+        </form>
+    </div>
+</div>
 
 <script src="/js/admin-products.js"></script>

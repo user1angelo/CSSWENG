@@ -30,9 +30,10 @@ createAccount?.addEventListener("click", async (e) => {
         if (response.status == 201) {
             alert("Account created successfully! Please log in.");
             window.location.href = "/login";
+        } else if (response.status == 409) {
+            alert("ERROR: An account already exists with this email");
         } else {
-            const errorMessage = await response.text();
-            alert("ERROR: " + errorMessage);
+            alert("ERROR: Failed to create account, make sure it ends with '@gmail.com'");
             console.log("ERROR: Failed to create account in signup.js");
         }
     } catch (err) {

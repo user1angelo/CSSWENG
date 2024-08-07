@@ -15,16 +15,51 @@
 
     {{#if session.user}}
         <h2>Edit Profile</h2>
-    <form class="edit-profile-form" action="/profile/update" method="POST" enctype="multipart/form-data">
-        <label for="bio">Bio:</label>
-        <textarea id="bio" name="bio">{{user.bio}}</textarea>
+        <form class="edit-profile-form" action="/profile/update" method="POST" enctype="multipart/form-data">
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio">{{user.bio}}</textarea>
 
-        <label for="profilePicture">Profile Picture:</label>
-        <input type="file" id="profilePicture" name="profilePicture">
+            <label for="profilePicture">Profile Picture:</label>
+            <input type="file" id="profilePicture" name="profilePicture">
 
-        <button type="submit">Update Profile</button>
-    </form>
+            <button type="submit">Update Profile</button>
+        </form>
     {{else}}
         <p>Please <a href="/login">log in</a> to edit your profile.</p>
     {{/if}}
+
+    <h2>Your Posts</h2>
+    <div class="user-posts">
+        {{#each posts}}
+            <div class="post">
+                <h3>{{this.title}}</h3>
+                <p>{{this.content}}</p>
+                <p>Product: {{this.product.productName}}</p> <!-- Display associated product name -->
+                <button class="delete-post-btn" data-post-id="{{this._id}}">Delete</button>
+            </div>
+        {{/each}}
+    </div>
 </div>
+
+<script>
+    document.querySelectorAll('.delete-post-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+            const postId = e.target.getAttribute('data-post-id');
+            if (confirm('Are you sure you want to delete this post?')) {
+                try {
+                    const response = await fetch(`/profile/posts/${postId}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error deleting postasdads');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An unexpected error occurred');
+                }
+            }
+        });
+    });
+</script>

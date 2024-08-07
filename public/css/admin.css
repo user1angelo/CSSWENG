@@ -83,3 +83,66 @@ button.delete {
 button.delete:hover {
     background-color: #A00000;
 }
+
+
+
+/* Added for Editting products in admin dashboard */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #333;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 5px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #EEEEEE;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#edit-product-form input,
+#edit-product-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #222;
+    color: #EEEEEE;
+}
+
+#edit-product-form button {
+    background-color: #A91D3A;
+    color: #EEEEEE;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#edit-product-form button:hover {
+    background-color: #C73659;
+}

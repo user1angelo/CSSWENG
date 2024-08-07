@@ -36,13 +36,17 @@
 .post-form input[type="text"],
 .post-form select,
 .post-form textarea {
-    width: 100%;
+    width: calc(100% - 22px); /* stay within frame */
     padding: 10px;
     margin-bottom: 10px;
     background-color: #333333;
     border: 1px solid #444444;
     color: #EEEEEE;
     border-radius: 3px;
+}
+
+.post-form textarea {
+    resize: vertical;
 }
 
 .post-form button {
@@ -80,6 +84,8 @@
 .post-content {
     color: #EEEEEE;
     margin-bottom: 10px;
+    word-wrap: break-word; /* break and wrap */
+    white-space: pre-wrap; /* thios will preserve whitespace and ensure long lines of text will wrap */
 }
 
 .vote-buttons {
@@ -89,7 +95,9 @@
 }
 
 .upvote,
-.downvote {
+.downvote,
+.upvote-com,
+.downvote-com {
     background-color: #333333;
     color: #EEEEEE;
     border: none;
@@ -136,13 +144,14 @@
 }
 
 .comment-form textarea {
-    width: 100%;
+    width: calc(100% - 22px); /* stay within frame */
     padding: 10px;
     margin-bottom: 10px;
     background-color: #333333;
     border: 1px solid #444444;
     color: #EEEEEE;
     border-radius: 3px;
+    resize: vertical;
 }
 
 .comment-form button {
